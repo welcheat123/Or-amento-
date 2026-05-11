@@ -211,10 +211,17 @@ let montantes = Math.ceil((largura / spacing) * (1 + perda));
 let guias = Math.ceil(((largura * 4) / 3) * (1 + perda));
 
 // ======================
-// GN25 (CORRIGIDO REAL)
-// 2,16 m² = 15 parafusos por face
+// GN25 CORRIGIDO DEFINITIVO
 // ======================
-let gn25 = Math.ceil(((areaUtil / 2.16) * 15 * faces) * (1 + perda));
+
+// base real: 2,16m² = 15 parafusos por face
+let basePlacas = (areaUtil / 2.16) * faces;
+
+// ajuste suave por estrutura (SEM EXPLODIR VALORES)
+let ajusteEstrutura = 1 + ((0.6 - spacing) / 0.6) * 0.25;
+
+// GN25 FINAL
+let gn25 = Math.ceil(basePlacas * 15 * ajusteEstrutura);
 
 // ======================
 // FITA
