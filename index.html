@@ -1,45 +1,71 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Calculadora Drywall Profissional + Painel</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drywall PRO Evoluído</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
-body{background:#0f172a;color:#e2e8f0;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
+body{
+background:#0f172a;
+color:white;
+font-family:Arial;
+padding:20px;
+}
 
-.container{width:100%;max-width:900px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px}
+.container{
+max-width:950px;
+margin:auto;
+background:rgba(255,255,255,0.05);
+padding:20px;
+border-radius:12px;
+border:1px solid rgba(255,255,255,0.1);
+}
 
-h1{font-size:20px;margin-bottom:10px}
+.tabs{
+display:flex;
+gap:10px;
+margin-bottom:15px;
+}
 
-.tabs{display:flex;gap:10px;margin-bottom:20px}
-.tab{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,0.08);cursor:pointer}
-.tab.active{background:#22c55e;color:#0f172a;font-weight:700}
+.tab{
+padding:10px;
+border-radius:8px;
+background:rgba(255,255,255,0.08);
+cursor:pointer;
+}
+
+.tab.active{
+background:#22c55e;
+color:#000;
+font-weight:bold;
+}
 
 .panel{display:none}
 .active{display:block}
 
-label{font-size:13px;margin-top:10px;display:block}
-
-input, select{
-width:100%;
-padding:10px;
-margin-top:5px;
-border-radius:10px;
-border:1px solid rgba(255,255,255,0.2);
-background:rgba(255,255,255,0.05);
-color:white;
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
 }
 
-button{padding:10px 12px;border:none;border-radius:10px;cursor:pointer;margin-top:10px}
-.btn{background:#22c55e;color:#0f172a;font-weight:700}
+input,select,button{
+width:100%;
+padding:10px;
+margin-top:8px;
+border-radius:8px;
+border:none;
+}
 
-.result{background:rgba(34,197,94,0.1);padding:12px;border-radius:12px;margin-top:10px;border:1px solid rgba(34,197,94,0.3)}
+button{background:#22c55e;font-weight:bold;cursor:pointer}
 
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.result{
+margin-top:15px;
+background:rgba(34,197,94,0.1);
+padding:10px;
+border-radius:8px;
+}
 </style>
 </head>
 
@@ -47,167 +73,181 @@ button{padding:10px 12px;border:none;border-radius:10px;cursor:pointer;margin-to
 
 <div class="container">
 
-<h1>🧱 Sistema Drywall Profissional</h1>
+<h2>🧱 Drywall PRO Atualizado</h2>
 
 <div class="tabs">
-  <div class="tab active" onclick="showTab('calc', this)">Calculadora</div>
-  <div class="tab" onclick="showTab('admin', this)">Painel Admin</div>
+<div class="tab active" onclick="show('calc',this)">Calculadora</div>
+<div class="tab" onclick="show('admin',this)">Painel Admin</div>
 </div>
 
 <!-- CALCULADORA -->
 <div id="calc" class="panel active">
 
-<label>Metragem (m²)</label>
-<input type="number" id="area" placeholder="Ex: 15" />
+<input id="area" type="number" placeholder="Área m²">
 
-<label>Espaçamento montantes</label>
-<select id="spacing">
-  <option value="0.6">60 cm</option>
-  <option value="0.4">40 cm</option>
+<select id="abertura">
+<option value="nao">Sem portas/janelas</option>
+<option value="sim">Com portas/janelas (-15%)</option>
 </select>
 
-<button class="btn" onclick="calcular()">Gerar Orçamento</button>
+<label>Espaçamento Montantes</label>
+<select id="spacing">
+<option value="0.6">60 cm</option>
+<option value="0.4">40 cm</option>
+</select>
 
-<div class="result" id="result"></div>
+<label>Espaçamento GN25 (placa)</label>
+<select id="esp_gn25">
+<option value="0.25">25 cm</option>
+<option value="0.3">30 cm</option>
+<option value="0.4">40 cm</option>
+</select>
+
+<label>Espaçamento Bucha + Parafuso</label>
+<select id="esp_fix">
+<option value="0.4">40 cm</option>
+<option value="0.5">50 cm</option>
+<option value="0.6">60 cm</option>
+<option value="0.8">80 cm</option>
+<option value="1">1 m</option>
+</select>
+
+<button onclick="calcular()">Gerar orçamento</button>
+
+<div id="res" class="result"></div>
 
 </div>
 
-<!-- ADMIN -->
+<!-- ADMIN CORRIGIDO -->
 <div id="admin" class="panel">
 
 <h3>💰 Painel de Preços</h3>
 
 <div class="grid">
-  <div>
-    <label>Preço Placa (R$)</label>
-    <input id="p_placa" type="number">
-  </div>
 
-  <div>
-    <label>Preço Montante (R$)</label>
-    <input id="p_montante" type="number">
-  </div>
+<div><label>Placa</label><input id="placa"></div>
+<div><label>Montante</label><input id="montante"></div>
+<div><label>Guia</label><input id="guia"></div>
+<div><label>Mão de obra</label><input id="mao"></div>
 
-  <div>
-    <label>Preço Guia (R$)</label>
-    <input id="p_guia" type="number">
-  </div>
-
-  <div>
-    <label>Mão de obra (R$/m²)</label>
-    <input id="p_mao" type="number">
-  </div>
-</div>
-
-<button class="btn" onclick="salvar()">Salvar Valores</button>
+<div><label>GN25</label><input id="gn25"></div>
+<div><label>Fita</label><input id="fita"></div>
+<div><label>Massa</label><input id="massa"></div>
+<div><label>Fixação</label><input id="fixacao"></div>
 
 </div>
 
-</div
-<label>Tipo de parede</label>
-<select id="type">
-  <option value="simples">Simples</option>
-  <option value="reforcada">Reforçada</option>
-</select>
+<button onclick="salvar()">Salvar tudo</button>
 
-<label>Espaçamento montantes</label>
-<select id="spacing">
-  <option value="0.6">60 cm</option>
-  <option value="0.4">40 cm</option>
-</select>
-
-<button class="btn" onclick="calcular()">Gerar Orçamento</button>
-
-<div class="result" id="result"></div>
-
-  </div>  <!-- ADMIN -->  <div id="admin" class="panel"><h3>💰 Painel de Preços</h3>
-
-<div class="grid">
-  <div>
-    <label>Preço Placa (R$)</label>
-    <input id="p_placa" type="number">
-  </div>
-
-  <div>
-    <label>Preço Montante (R$)</label>
-    <input id="p_montante" type="number">
-  </div>
-
-  <div>
-    <label>Preço Guia (R$)</label>
-    <input id="p_guia" type="number">
-  </div>
-
-  <div>
-    <label>Mão de obra (R$/m²)</label>
-    <input id="p_mao" type="number">
-  </div>
 </div>
 
-<button class="btn" onclick="salvar()">Salvar Valores</button>
+</div>
 
-  </div></div><script>
+<script>
 
-// pseudo "banco de dados"
-let db = JSON.parse(localStorage.getItem('db_drywall')) || {
-  placa: 25,
-  montante: 18,
-  guia: 20,
-  mao: 35
+let db = JSON.parse(localStorage.getItem("db")) || {
+placa:25,
+montante:18,
+guia:20,
+mao:35,
+gn25:0.12,
+fita:18,
+massa:65,
+fixacao:0.3
 };
 
-function showTab(t){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById(t).classList.add('active');
+function show(t,el){
+document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+document.getElementById(t).classList.add("active");
 
-  document.querySelectorAll('.tab').forEach(tab=>tab.classList.remove('active'));
-  event.target.classList.add('active');
+document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+el.classList.add("active");
 
-  loadAdmin();
+load();
 }
 
-function loadAdmin(){
-  document.getElementById('p_placa').value=db.placa;
-  document.getElementById('p_montante').value=db.montante;
-  document.getElementById('p_guia').value=db.guia;
-  document.getElementById('p_mao').value=db.mao;
+function load(){
+for(let k in db){
+if(document.getElementById(k)) document.getElementById(k).value=db[k];
+}
 }
 
 function salvar(){
-  db.placa=+p_placa.value;
-  db.montante=+p_montante.value;
-  db.guia=+p_guia.value;
-  db.mao=+p_mao.value;
-
-  localStorage.setItem('db_drywall',JSON.stringify(db));
-  alert('Salvo com sucesso!');
+for(let k in db){
+db[k]=+document.getElementById(k).value;
+}
+localStorage.setItem("db",JSON.stringify(db));
+alert("Salvo!");
 }
 
 function calcular(){
-  let area=+document.getElementById('area').value;
-  let spacing=+document.getElementById('spacing').value;
 
-  let placas=Math.ceil((area/2.16)*1.1);
-  let montantes=Math.ceil(((Math.sqrt(area)/spacing)+1)*1.1);
-  let guias=Math.ceil((Math.sqrt(area)*4)/3);
+let area = +document.getElementById("area").value;
+let abertura = document.getElementById("abertura").value;
 
-  let total=
-    placas*db.placa+
-    montantes*db.montante+
-    guias*db.guia+
-    area*db.mao;
+let spacing = +document.getElementById("spacing").value;
+let esp_gn25 = +document.getElementById("esp_gn25").value;
+let esp_fix = +document.getElementById("esp_fix").value;
 
-  document.getElementById('result').innerHTML=`
-    📐 Área: ${area} m²<br><br>
-    📄 Placas: ${placas} (R$ ${placas*db.placa})<br>
-    📐 Montantes: ${montantes} (R$ ${montantes*db.montante})<br>
-    📏 Guias: ${guias} (R$ ${guias*db.guia})<br>
-    👷 Mão de obra: R$ ${area*db.mao}<br><br>
-    💰 <b>Total: R$ ${total.toFixed(2)}</b>
-  `;
+if(!area){alert("Digite área");return;}
+
+let areaUtil = abertura==="sim" ? area*0.85 : area;
+
+let largura = Math.sqrt(areaUtil);
+
+// estrutura
+let placas = Math.ceil(areaUtil/2.16);
+let montantes = Math.ceil(largura/spacing);
+let guias = Math.ceil((largura*4)/3);
+
+// GN25 corrigido
+let gn25 = Math.ceil(areaUtil/esp_gn25);
+
+// massa correta
+let massa = Math.ceil(areaUtil/40);
+
+// fixação corrigida
+let metros = largura*4;
+let fix = Math.ceil((metros/esp_fix)*2);
+
+// fita
+let fita_metros = areaUtil * 1.5;
+let fita = Math.ceil(fita_metros / 45);
+
+// total
+let total =
+placas*db.placa+
+montantes*db.montante+
+guias*db.guia+
+areaUtil*db.mao+
+gn25*db.gn25+
+fita*db.fita+
+massa*db.massa+
+fix*db.fixacao;
+
+res.innerHTML=`
+📐 Área: ${area} m²<br>
+🚪 Abertura: ${abertura}<br>
+📐 Área útil: ${areaUtil.toFixed(2)} m²<br><br>
+
+📄 Placas: ${placas}<br>
+📐 Montantes: ${montantes}<br>
+📏 Guias: ${guias}<br><br>
+
+🔩 GN25: ${gn25}<br>
+🪛 Fixação: ${fix}<br>
+🧵 Fita: ${fita}<br>
+🪣 Massa: ${massa}<br><br>
+
+💼 Mão de obra: R$ ${(areaUtil * db.mao).toFixed(2)}<br><br>
+
+💰 <b>Total: R$ ${total.toFixed(2)}</b>
+`;
 }
 
-loadAdmin();
+load();
 
-</script></body>
+</script>
+
+</body>
 </html>
