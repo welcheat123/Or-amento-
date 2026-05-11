@@ -1,40 +1,109 @@
-<!DOCTYPE html><html lang="pt-br">
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calculadora Drywall Profissional + Painel</title>  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">  <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
-    body{background:#0f172a;color:#e2e8f0;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Calculadora Drywall Profissional + Painel</title>
 
-    .container{width:100%;max-width:900px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    h1{font-size:20px;margin-bottom:10px}
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
+body{background:#0f172a;color:#e2e8f0;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
 
-    .tabs{display:flex;gap:10px;margin-bottom:20px}
-    .tab{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,0.08);cursor:pointer}
-    .tab.active{background:#22c55e;color:#0f172a;font-weight:700}
+.container{width:100%;max-width:900px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px}
 
-    .step,.panel{display:none}
-    .active{display:block}
+h1{font-size:20px;margin-bottom:10px}
 
-    label{font-size:13px;margin-top:10px;display:block}
+.tabs{display:flex;gap:10px;margin-bottom:20px}
+.tab{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,0.08);cursor:pointer}
+.tab.active{background:#22c55e;color:#0f172a;font-weight:700}
 
-    input{width:100%;padding:10px;margin-top:5px;border-radius:10px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.05);color:white}
+.panel{display:none}
+.active{display:block}
 
-    button{padding:10px 12px;border:none;border-radius:10px;cursor:pointer;margin-top:10px}
-    .btn{background:#22c55e;color:#0f172a;font-weight:700}
-    .btn2{background:rgba(255,255,255,0.1);color:white}
+label{font-size:13px;margin-top:10px;display:block}
 
-    .result{background:rgba(34,197,94,0.1);padding:12px;border-radius:12px;margin-top:10px;border:1px solid rgba(34,197,94,0.3)}
+input, select{
+width:100%;
+padding:10px;
+margin-top:5px;
+border-radius:10px;
+border:1px solid rgba(255,255,255,0.2);
+background:rgba(255,255,255,0.05);
+color:white;
+}
 
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  </style></head>
-<body><div class="container">  <h1>🧱 Sistema Drywall Profissional</h1>  <div class="tabs">
-    <div class="tab active" onclick="showTab('calc')">Calculadora</div>
-    <div class="tab" onclick="showTab('admin')">Painel Admin</div>
-  </div>  <!-- CALCULADORA -->  <div id="calc" class="panel active"><label>Metragem (m²)</label>
+button{padding:10px 12px;border:none;border-radius:10px;cursor:pointer;margin-top:10px}
+.btn{background:#22c55e;color:#0f172a;font-weight:700}
+
+.result{background:rgba(34,197,94,0.1);padding:12px;border-radius:12px;margin-top:10px;border:1px solid rgba(34,197,94,0.3)}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🧱 Sistema Drywall Profissional</h1>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('calc', this)">Calculadora</div>
+  <div class="tab" onclick="showTab('admin', this)">Painel Admin</div>
+</div>
+
+<!-- CALCULADORA -->
+<div id="calc" class="panel active">
+
+<label>Metragem (m²)</label>
 <input type="number" id="area" placeholder="Ex: 15" />
 
+<label>Espaçamento montantes</label>
+<select id="spacing">
+  <option value="0.6">60 cm</option>
+  <option value="0.4">40 cm</option>
+</select>
+
+<button class="btn" onclick="calcular()">Gerar Orçamento</button>
+
+<div class="result" id="result"></div>
+
+</div>
+
+<!-- ADMIN -->
+<div id="admin" class="panel">
+
+<h3>💰 Painel de Preços</h3>
+
+<div class="grid">
+  <div>
+    <label>Preço Placa (R$)</label>
+    <input id="p_placa" type="number">
+  </div>
+
+  <div>
+    <label>Preço Montante (R$)</label>
+    <input id="p_montante" type="number">
+  </div>
+
+  <div>
+    <label>Preço Guia (R$)</label>
+    <input id="p_guia" type="number">
+  </div>
+
+  <div>
+    <label>Mão de obra (R$/m²)</label>
+    <input id="p_mao" type="number">
+  </div>
+</div>
+
+<button class="btn" onclick="salvar()">Salvar Valores</button>
+
+</div>
+
+</div
 <label>Tipo de parede</label>
 <select id="type">
   <option value="simples">Simples</option>
