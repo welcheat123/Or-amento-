@@ -215,14 +215,22 @@ let guias = Math.ceil(((largura * 4) / 3) * (1 + perda));
 // ======================
 
 // base real: 2,16m² = 15 parafusos por face
+
+// base real de consumo
 let basePlacas = (areaUtil / 2.16) * faces;
 
-// ajuste suave por estrutura (SEM EXPLODIR VALORES)
-let ajusteEstrutura = 1 + ((0.6 - spacing) / 0.6) * 0.25;
+// número de montantes por metro (impacto direto na fixação)
+let montantesBase = largura / spacing;
 
-// GN25 FINAL
-let gn25 = Math.ceil(basePlacas * 15 * ajusteEstrutura);
+// referência padrão (60 cm)
+let montantesRef = largura / 0.6;
 
+// fator real de estrutura (proporcional de verdade)
+let fatorEstrutura = montantesBase / montantesRef;
+
+// GN25 final corrigido (agora responde corretamente ao espaçamento)
+let gn25 = Math.ceil(basePlacas * 15 * fatorEstrutura);  
+  
 // ======================
 // FITA
 // ======================
