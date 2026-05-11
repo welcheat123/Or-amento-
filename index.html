@@ -96,11 +96,10 @@ border-radius:8px;
 <option value="0.4">40 cm</option>
 </select>
 
-<label>Espaçamento GN25 (placa)</label>
-<select id="esp_gn25">
-<option value="0.25">25 cm</option>
-<option value="0.3">30 cm</option>
-<option value="0.4">40 cm</option>
+<label>Faces da parede</label>
+<select id="faces">
+<option value="1">1 face</option>
+<option value="2" selected>2 faces</option>
 </select>
 
 <label>Espaçamento Bucha + Parafuso</label>
@@ -112,13 +111,21 @@ border-radius:8px;
 <option value="1">1 m</option>
 </select>
 
+<label>Perda de material</label>
+<select id="perda">
+<option value="0">0%</option>
+<option value="0.10">10%</option>
+<option value="0.15" selected>15%</option>
+<option value="0.20">20%</option>
+</select>
+
 <button onclick="calcular()">Gerar orçamento</button>
 
 <div id="res" class="result"></div>
 
 </div>
 
-<!-- ADMIN CORRIGIDO -->
+<!-- ADMIN -->
 <div id="admin" class="panel">
 
 <h3>💰 Painel de Preços</h3>
@@ -184,10 +191,11 @@ function calcular(){
 
 let area = +document.getElementById("area").value;
 let abertura = document.getElementById("abertura").value;
+let faces = +document.getElementById("faces").value;
 
 let spacing = +document.getElementById("spacing").value;
-let esp_gn25 = +document.getElementById("esp_gn25").value;
 let esp_fix = +document.getElementById("esp_fix").value;
+let perda = +document.getElementById("perda").value;
 
 if(!area){alert("Digite área");return;}
 
@@ -195,26 +203,39 @@ let areaUtil = abertura==="sim" ? area*0.85 : area;
 
 let largura = Math.sqrt(areaUtil);
 
-// estrutura
-let placas = Math.ceil(areaUtil/2.16);
-let montantes = Math.ceil(largura/spacing);
-let guias = Math.ceil((largura*4)/3);
+// ======================
+// ESTRUTURA
+// ======================
+let placas = Math.ceil((areaUtil / 2.16) * faces * (1 + perda));
+let montantes = Math.ceil((largura / spacing) * (1 + perda));
+let guias = Math.ceil(((largura * 4) / 3) * (1 + perda));
 
-// GN25 corrigido
-let gn25 = Math.ceil(areaUtil/esp_gn25);
+// ======================
+// GN25 (CORRIGIDO REAL)
+// 2,16 m² = 15 parafusos por face
+// ======================
+let gn25 = Math.ceil(((areaUtil / 2.16) * 15 * faces) * (1 + perda));
 
-// massa correta
-let massa = Math.ceil(areaUtil/40);
-
-// fixação corrigida
-let metros = largura*4;
-let fix = Math.ceil((metros/esp_fix)*2);
-
-// fita
+// ======================
+// FITA
+// ======================
 let fita_metros = areaUtil * 1.5;
-let fita = Math.ceil(fita_metros / 45);
+let fita = Math.ceil((fita_metros / 45) * (1 + perda));
 
-// total
+// ======================
+// MASSA
+// ======================
+let massa = Math.ceil((areaUtil / 40) * (1 + perda));
+
+// ======================
+// FIXAÇÃO
+// ======================
+let perimetro = 4 * Math.sqrt(areaUtil);
+let fix = Math.ceil((perimetro / esp_fix) * (1 + perda));
+
+// ======================
+// TOTAL
+// ======================
 let total =
 placas*db.placa+
 montantes*db.montante+
@@ -225,7 +246,12 @@ fita*db.fita+
 massa*db.massa+
 fix*db.fixacao;
 
+// ======================
+// RESULTADO
+// ======================
 res.innerHTML=`
+📉 Perda: ${(perda*100).toFixed(0)}%<br><br>
+
 📐 Área: ${area} m²<br>
 🚪 Abertura: ${abertura}<br>
 📐 Área útil: ${areaUtil.toFixed(2)} m²<br><br>
